@@ -19,25 +19,7 @@ func main() {
     slicesOfFour := createSlices(text, 4)
 
     setupTtyToReadChars()
-
-    var b []byte = make([]byte, 1)
-    for _, chunk := range slicesOfFour {
-        fmt.Println(chunk)
-        fmt.Print("Would you like to (c)opy (s)kip or (e)xit [c/s/e]")
-        os.Stdin.Read(b)
-        s := string(b)
-
-        fmt.Println("") 
-        
-        switch s {
-          case "c":
-            clipboard.WriteAll(chunk)
-          case "s":
-            continue
-          case "e":
-            os.Exit(0)
-        }
-    }
+    getUserInputForChunks(slicesOfFour, 0)
 }
 
 func createSlices (text string, n int) []string {
@@ -61,4 +43,28 @@ func createSlices (text string, n int) []string {
 func setupTtyToReadChars () {
     exec.Command("stty", "-F", "/dev/tty", "cbreak", "min", "1").Run()
     exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
+}
+
+func getUserInputForChunks (slicesOfFour []string, idx int) {
+    var b []byte = make([]byte, 1)
+    for i, chunk := range slicesOfFour[idx:] {
+        fmt.Println(chunk)
+        fmt.Print("Would you like to (c)opy (s)kip or (e)xit [c/s/e]")
+        os.Stdin.Read(b)
+        s := string(b)
+
+        fmt.Println("") 
+        
+        switch s {
+          case "c":
+            clipboard.WriteAll(chunk)
+          case "s":
+            continue
+          case "e":
+            os.Exit(0)
+          default:
+            fmt.Println("Invalid input, please try again")
+            getUserInputForChunks(slicesOfFour, i)
+        }
+    }
 }
