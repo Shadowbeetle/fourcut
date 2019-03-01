@@ -46,21 +46,21 @@ func setupTtyToReadChars () {
 }
 
 func getUserInputForChunks (slicesOfFour []string, idx int) {
-    var b []byte = make([]byte, 1)
     for i, chunk := range slicesOfFour[idx:] {
-        fmt.Println(chunk)
+      fmt.Println("Next chunk: " + chunk)
         fmt.Print("Would you like to (c)opy (s)kip or (e)xit [c/s/e]")
-        os.Stdin.Read(b)
-        s := string(b)
+
+        reader := bufio.NewReader(os.Stdin)
+        char, _, _ := reader.ReadRune()
 
         fmt.Println("") 
         
-        switch s {
-          case "c":
+        switch char {
+          case 'c':
             clipboard.WriteAll(chunk)
-          case "s":
+          case 's':
             continue
-          case "e":
+          case 'e':
             os.Exit(0)
           default:
             fmt.Println("Invalid input, please try again")
