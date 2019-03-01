@@ -1,0 +1,12 @@
+{
+	"ImportPath": "github.com/Shadowbeetle/fourcut",
+	"GoVersion": "go1.12",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/atotto/clipboard",
+			"Comment": "v0.1.1",
+			"Rev": "aa9549103943c05f3e8951009cdb6a0bec2c8949"
+		}
+	]
+}
