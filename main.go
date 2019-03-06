@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/atotto/clipboard"
 	"os"
-	"os/exec"
 	"strings"
+
+	"github.com/RisingStack/simple-prompt/prompt"
+	"github.com/atotto/clipboard"
 )
 
 func main() {
@@ -18,8 +19,7 @@ func main() {
 
 	slicesOfFour := createSlices(text, 4)
 
-	setupTtyToReadChars()
-	getUserInputForChunks(slicesOfFour, 0)
+	getUserInputForChunks(slicesOfFour)
 }
 
 func createSlices(text string, n int) []string {
@@ -40,20 +40,14 @@ func createSlices(text string, n int) []string {
 	return slicesOfFour
 }
 
-func setupTtyToReadChars() {
-	exec.Command("stty", "-F", "/dev/tty", "cbreak", "min", "1").Run()
-	exec.Command("stty", "-F", "/dev/tty", "-echo").Run()
-}
-
-func getUserInputForChunks(slicesOfFour []string, idx int) {
-	for i, chunk := range slicesOfFour[idx:] {
+func getUserInputForChunks(slicesOfFour []string) {
+	for _, chunk := range slicesOfFour {
 		fmt.Println("Next chunk: " + chunk)
-		fmt.Print("Would you like to (c)opy (s)kip or (e)xit [c/s/e]")
+		char, err := prompt.Ask("Would you like to (c)opy (s)kip or (e)xit [c/s/e]", &prompt.AskOptions{Answers: []rune{'c', 's', 'e'}})
 
-		reader := bufio.NewReader(os.Stdin)
-		char, _, _ := reader.ReadRune()
-
-		fmt.Println("")
+		if err != nil {
+			panic(err)
+		}
 
 		switch char {
 		case 'c':
@@ -62,9 +56,6 @@ func getUserInputForChunks(slicesOfFour []string, idx int) {
 			continue
 		case 'e':
 			os.Exit(0)
-		default:
-			fmt.Println("Invalid input, please try again")
-			getUserInputForChunks(slicesOfFour, i)
 		}
 	}
 }

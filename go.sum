@@ -1,2 +1,5 @@
+github.com/RisingStack/simple-prompt v0.0.0-20190306081953-1243bf7f4d9d h1:esAdW9hSCwX2aYhLkN8jvcMxz6h+xCYnecdbrKQqDjk=
+github.com/RisingStack/simple-prompt v0.0.0-20190306081953-1243bf7f4d9d/go.mod h1:0RM3Vn01iw0OLL9rD0p3/x9/o5cU7haGEAGgJBVFwqU=
+github.com/RisingStack/simple-prompt v0.0.0-20190306092855-6477242396c1 h1:AdgEsScglaJUH6w24iA6iG2gno+t1qCsmwGXG29aDow=
 github.com/atotto/clipboard v0.1.1 h1:WSoEbAS70E5gw8FbiqFlp69MGsB6dUb4l+0AGGLiVGw=
 github.com/atotto/clipboard v0.1.1/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn0Yu86PYI=
