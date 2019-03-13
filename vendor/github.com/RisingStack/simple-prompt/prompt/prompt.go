@@ -18,7 +18,7 @@ type AskOptions struct {
 	Reader               io.RuneReader                           // default: bufio.NewReader(os.Stdin)
 	Answers              []rune                                  // default: []rune{'y', 'n'}
 	InvalidAnswerMessage string                                  // default: "Invalid answer, please try again"
-	FailHandler          func(string, *AskOptions) (rune, error) // default: prompt.Ask
+	FailHandlerFunc      func(string, *AskOptions) (rune, error) // default: prompt.Ask
 }
 
 func setDefaults(opts *AskOptions) {
@@ -34,14 +34,14 @@ func setDefaults(opts *AskOptions) {
 		opts.Reader = bufio.NewReader(os.Stdin)
 	}
 
-	if opts.FailHandler == nil {
-		opts.FailHandler = Ask
+	if opts.FailHandlerFunc == nil {
+		opts.FailHandlerFunc = Ask
 	}
 }
 
 // Ask prompts the provided question to the user and waits for a single character input from a io.RuneReader passed in AskOptions.Reader (default: os.Stdin).
 // The answer is validated against the contents of AskOptions.Answers, and either the provided input is returned, or the AskOptions.InvalidAnswerMessage is printed
-// and AskOptions.FailHandler is called. If no FailHandler is provided, Ask is called again, prompting again for a valid input.
+// and AskOptions.FailHandlerFunc is called. If no FailHandlerFunc is provided, Ask is called again, prompting again for a valid input.
 //
 func Ask(question string, opts *AskOptions) (rune, error) {
 	setDefaults(opts)
@@ -56,7 +56,7 @@ func Ask(question string, opts *AskOptions) (rune, error) {
 
 	if !isRuneContained(char, opts.Answers) {
 		fmt.Println(opts.InvalidAnswerMessage)
-		return opts.FailHandler(question, opts)
+		return opts.FailHandlerFunc(question, opts)
 	}
 
 	return char, err
